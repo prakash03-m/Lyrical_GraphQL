@@ -7,20 +7,28 @@ const schema = require('./schema/schema');
 
 const app = express();
 
-// Replace with your mongoLab URI
-const MONGO_URI = 'mongodb://stephengrider:stephengrider@ds131139.mlab.com:31139/facespace';
+// Replace with your Mongo Atlas URI
+const MONGO_URI = 'mongodb+srv://prakash03m:0HEMlSRubpc3BoUG@cluster0.73d0g.mongodb.net/lyrical?retryWrites=true&w=majority&appName=Cluster0';
+if (!MONGO_URI) {
+  throw new Error('You must provide a Mongo Atlas URI');
+}
 
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGO_URI);
 mongoose.connection
-    .once('open', () => console.log('Connected to MongoLab instance.'))
-    .on('error', error => console.log('Error connecting to MongoLab:', error));
+  .once('open', () => console.log('Connected to Mongo Atlas instance'))
+  .on('error', (error) =>
+    console.log('Error connecting to Mongo Atlas:', error)
+  );
 
 app.use(bodyParser.json());
-app.use('/graphql', expressGraphQL({
-  schema,
-  graphiql: true
-}));
+app.use(
+  '/graphql',
+  expressGraphQL({
+    schema,
+    graphiql: true
+  })
+);
 
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
